@@ -9,4 +9,10 @@ defmodule Messengyr.Accounts do
     |> validate_required([:username, :email, :password])
     |> Repo.insert()
   end
+
+  def register_changeset(params \\ %{}) do
+    %User{}
+    |> cast(params, [:username, :email, :password])
+    |> validate_required([:username, :email, :password])
+  end
 end
