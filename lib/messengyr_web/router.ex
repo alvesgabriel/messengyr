@@ -13,8 +13,12 @@ defmodule MessengyrWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :browser_session do
+    plug Messengyr.Auth.Pipeline
+  end
+
   scope "/", MessengyrWeb do
-    pipe_through :browser
+    pipe_through [:browser, :browser_session]
 
     get "/", PageController, :index
 
@@ -22,6 +26,7 @@ defmodule MessengyrWeb.Router do
     post "/signup", PageController, :create_user
 
     get "/login", PageController, :login
+    post "/login", PageController, :login_user
   end
 
   # Other scopes may use custom stacks.
