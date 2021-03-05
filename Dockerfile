@@ -1,6 +1,7 @@
 FROM elixir:1.11.3-alpine
 
 RUN apk update && \
+    apk add --upgrade build-base && \
     apk add --upgrade inotify-tools && \
     apk add --upgrade nodejs && \
     apk add --upgrade curl && \

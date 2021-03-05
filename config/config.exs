@@ -23,6 +23,13 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+# Configures the Guardian library
+config :messengyr, Messengyr.Auth.Guardian,
+  issuer: "Messengyr",
+  ttl: {30, :days},
+  allowed_drift: 2000,
+  secret_key: "42uMdQKV4R5zf+ElmPe5MwSUSGZTbA88eiz1JSyavZuukOMLWVDrXwwHOFjLAR6h"
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
