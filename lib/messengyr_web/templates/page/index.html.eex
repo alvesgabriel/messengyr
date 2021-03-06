@@ -5,31 +5,8 @@
 
 <div class="action-boxes">
 
-  <div class="card login">
-    <form>
-      <input placeholder="Username">
-      <input placeholder="Password">
+  <%= render MessengyrWeb.PageView, "login.html", assigns %>
 
-      <button type="submit" class="login">Log in</button>
-    </form>
-  </div>
-
-  <div class="card signup">
-    <h5>
-      <strong>
-        New to Messenger?
-      </strong>
-
-      Sign up!
-    </h5>
-
-    <form>
-      <input placeholder="Email">
-      <input placeholder="Username">
-      <input placeholder="Password">
-
-      <button type="submit" class="signup">Sign up</button>
-    </form>
-  </div>
+  <%= render MessengyrWeb.PageView, "signup.html", assigns %>
 
 </div>
