@@ -38,9 +38,11 @@ defmodule MessengyrWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", MessengyrWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", MessengyrWeb do
+    pipe_through :api
+
+    resources "/users/", UserController, only: [:show]
+  end
 
   # Enables LiveDashboard only for development
   #
