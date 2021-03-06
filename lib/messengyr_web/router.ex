@@ -18,7 +18,7 @@ defmodule MessengyrWeb.Router do
   end
 
   scope "/", MessengyrWeb do
-    pipe_through [:browser, :browser_session]
+    pipe_through [:browser]
 
     get "/", PageController, :index
 
@@ -27,6 +27,14 @@ defmodule MessengyrWeb.Router do
 
     get "/login", PageController, :login
     post "/login", PageController, :login_user
+  end
+
+  scope "/", MessengyrWeb do
+    pipe_through [:browser, :browser_session]
+
+    get "/logout", PageController, :logout
+
+    get "/messages", ChatController, :index
   end
 
   # Other scopes may use custom stacks.

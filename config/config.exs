@@ -30,6 +30,10 @@ config :messengyr, Messengyr.Auth.Guardian,
   allowed_drift: 2000,
   secret_key: "42uMdQKV4R5zf+ElmPe5MwSUSGZTbA88eiz1JSyavZuukOMLWVDrXwwHOFjLAR6h"
 
+config :messengyr, Messengyr.Auth.Pipeline,
+  module: Messengyr.Auth.Guardian,
+  error_handler: Messengyr.Auth.ErrorHandler
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
