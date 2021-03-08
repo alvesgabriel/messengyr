@@ -6,9 +6,9 @@ defmodule Messengyr.Chat.Room do
   alias Messengyr.Accounts.User
 
   schema "rooms" do
-    has_many :message, Message
+    has_many :messages, Message
 
-    many_to_many :user, User, join_through: "room_users"
+    many_to_many :users, User, join_through: "room_users"
 
     timestamps()
   end
