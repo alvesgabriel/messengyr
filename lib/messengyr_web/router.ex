@@ -11,6 +11,8 @@ defmodule MessengyrWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_session
+    plug Messengyr.Auth.Pipeline
   end
 
   pipeline :browser_session do
@@ -42,6 +44,9 @@ defmodule MessengyrWeb.Router do
     pipe_through :api
 
     resources "/users/", UserController, only: [:show]
+
+    # Chat routes
+    resources "/rooms/", RoomController
   end
 
   # Enables LiveDashboard only for development
