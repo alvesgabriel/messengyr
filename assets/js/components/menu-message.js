@@ -1,5 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import "moment";
+import moment from "moment";
 
 class MenuMessage extends React.Component {
   render() {
@@ -7,7 +9,7 @@ class MenuMessage extends React.Component {
     let counterpart = room.counterpart;
 
     let lastMessage = room.messages.slice(-1)[0];
-    let sentAt = lastMessage.sentAt;
+    let sentAt = moment.utc(lastMessage.sentAt).fromNow();
 
     return (
       <li>
@@ -16,7 +18,7 @@ class MenuMessage extends React.Component {
         <div className="profile-container">
           <p className="name">{counterpart.username}</p>
 
-          <date>{sentAt}</date>
+          <time>{sentAt}</time>
 
           <p className="message">{lastMessage.text}</p>
         </div>
