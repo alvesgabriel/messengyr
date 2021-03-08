@@ -7,7 +7,7 @@ defmodule MessengyrWeb.UserView do
     }
   end
 
-  defp user_json(user) do
+  def user_json(user) do
     hash_email =
       :crypto.hash(:md5, user.email)
       |> Base.encode16()

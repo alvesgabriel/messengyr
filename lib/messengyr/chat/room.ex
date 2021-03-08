@@ -1,0 +1,22 @@
+defmodule Messengyr.Chat.Room do
+  use Ecto.Schema
+  import Ecto.Changeset
+
+  alias Messengyr.Chat.Message
+  alias Messengyr.Accounts.User
+
+  schema "rooms" do
+    has_many :message, Message
+
+    many_to_many :user, User, join_through: "room_users"
+
+    timestamps()
+  end
+
+  @doc false
+  def changeset(room, attrs) do
+    room
+    |> cast(attrs, [])
+    |> validate_required([])
+  end
+end
