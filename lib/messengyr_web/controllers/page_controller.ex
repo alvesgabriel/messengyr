@@ -41,7 +41,7 @@ defmodule MessengyrWeb.PageController do
         conn
         |> Guardian.Plug.sign_in(user)
         |> put_flash(:info, "Logged in as #{username}!")
-        |> render("index.html")
+        |> redirect(to: "/messages")
 
       {:error, message} ->
         conn

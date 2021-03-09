@@ -4,6 +4,12 @@ defmodule MessengyrWeb.RoomView do
   import MessengyrWeb.MessageView, only: [message_json: 2]
   import MessengyrWeb.UserView, only: [user_json: 1]
 
+  def render("show.json", %{room: room, me: me}) do
+    %{
+      room: room_json(room, %{me: me})
+    }
+  end
+
   def render("index.json", %{rooms: rooms, me: me}) do
     %{
       rooms: Enum.map(rooms, fn room -> room_json(room, %{me: me}) end)
@@ -16,7 +22,8 @@ defmodule MessengyrWeb.RoomView do
     %{
       id: room.id,
       counterpart: user_json(counterpart),
-      messages: Enum.map(room.messages, fn message -> message_json(message, %{me: me}) end)
+      messages: Enum.map(room.messages, fn message -> message_json(message, %{me: me}) end),
+      createdAt: room.inserted_at
     }
   end
 

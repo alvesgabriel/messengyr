@@ -3,6 +3,7 @@ defmodule Messengyr.Chat do
 
   alias Messengyr.Chat.{Message, Room, RoomUser}
   alias Messengyr.Repo
+  alias Messengyr.Accounts.User
 
   def create_room() do
     %Room{} |> Repo.insert()
@@ -16,6 +17,26 @@ defmodule Messengyr.Chat do
     |> Repo.insert()
   end
 
+  def preload_room_data(room) do
+    room
+    |> Repo.preload(:messages)
+    |> Repo.preload(:users)
+  end
+
+  defp add_room_users(room, []) do
+    {:ok, room |> preload_room_data}
+  end
+
+  defp add_room_users(room, [first_user | other_users]) do
+    case add_room_user(room, first_user) do
+      {:ok, _} ->
+        add_room_users(room, other_users)
+
+      _ ->
+        {:error, "Failed to add user to room!"}
+    end
+  end
+
   def add_message(%{room: room, user: user, text: text}) do
     %Message{
       room: room,
@@ -27,8 +48,7 @@ defmodule Messengyr.Chat do
 
   def list_rooms() do
     Repo.all(Room)
-    |> Repo.preload(:messages)
-    |> Repo.preload(:users)
+    |> preload_room_data()
   end
 
   def list_user_rooms(user) do
@@ -38,7 +58,15 @@ defmodule Messengyr.Chat do
         where: u.id == ^user.id
 
     Repo.all(query)
-    |> Repo.preload(:messages)
-    |> Repo.preload(:users)
+    |> preload_room_data()
+  end
+
+  def create_room_with_counterpart(me, counterpart_username) do
+    counterpart = Repo.get_by!(User, username: counterpart_username)
+    members = [me, counterpart]
+
+    with {:ok, room} <- create_room() do
+      add_room_users(room, members)
+    end
   end
 end

@@ -19,27 +19,6 @@ import DATA from "./mock-data";
 const store = createStore(rooms);
 
 class App extends React.Component {
-  // componentDidMount() {
-  //   fetch("/api/rooms", {
-  //     headers: {
-  //       Authorization: "Bearer " + window.jwtToken,
-  //     },
-  //   })
-  //     .then((response) => {
-  //       response.json().then((data) => {
-  //         let rooms = data.rooms;
-
-  //         this.setState({
-  //           rooms: rooms,
-  //           messages: rooms[0].messages,
-  //         });
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }
-
   render() {
     const ROOMS = DATA.rooms;
     const MESSAGES = DATA.rooms[0].messages;
