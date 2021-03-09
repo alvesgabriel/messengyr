@@ -11,8 +11,10 @@ class MenuMessage extends React.Component {
     let lastMessage = room.messages.slice(-1)[0];
     let sentAt = moment.utc(lastMessage.sentAt).fromNow();
 
+    let activeClass = room.isActive ? "active" : "";
+
     return (
-      <li>
+      <li className={activeClass}>
         <img className="avatar" />
 
         <div className="profile-container">
