@@ -1,11 +1,27 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
 import { connect } from "react-redux";
 
 import MenuMessage from "./menu-message";
 
 import { setRooms, selectRoom, addRoom } from "../actions";
+
+import socket from "../socket";
+
+let getRoomChannel = (roomId) => {
+  let channel = socket.channel(`room:${roomId}`);
+
+  channel
+    .join()
+    .receive("ok", (resp) => {
+      console.info(`Joined room ${roomId} successfully!`, resp);
+    })
+    .receive("error", (resp) => {
+      console.error(`Unable to join ${roomId}`, resp);
+    });
+
+  return channel;
+};
 
 class MenuContainer extends React.Component {
   componentDidMount() {
@@ -17,6 +33,12 @@ class MenuContainer extends React.Component {
       .then((response) => {
         response.json().then((data) => {
           let rooms = data.rooms;
+
+          rooms.forEach((room) => {
+            room.channel = getRoomChannel(room.id);
+            this.listenToNewMessages(room);
+          });
+
           this.props.setRooms(rooms);
 
           let firstRoom = rooms[0];
@@ -54,6 +76,14 @@ class MenuContainer extends React.Component {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  listenToNewMessages(room) {
+    room.channel.on("message:new", (resp) => {
+      let messageId = resp.messageId;
+
+      console.log(`Message with ID ${messageId} was posted!`);
+    });
   }
 
   render() {

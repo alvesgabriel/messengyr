@@ -2,7 +2,7 @@ defmodule MessengyrWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", MessengyrWeb.RoomChannel
+  channel "room:*", MessengyrWeb.RoomChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
@@ -16,9 +16,22 @@ defmodule MessengyrWeb.UserSocket do
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
   @impl true
-  def connect(_params, socket, _connect_info) do
-    {:ok, socket}
+  def connect(%{"token" => jwt}, socket) do
+    with {:ok, claims} <- Messengyr.Auth.Guardian.decode_and_verify(jwt),
+         {:ok, user} <- Messengyr.Auth.Guardian.resource_from_claims(claims) do
+      {:ok, assign(socket, :current_user, user)}
+    else
+      _ -> :error
+    end
   end
+
+  def connect(_params, _socket) do
+    :error
+  end
+
+  # def connect(_params, socket, _connect_info) do
+  #   {:ok, socket}
+  # end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
   #

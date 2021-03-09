@@ -5,6 +5,37 @@ import { connect } from "react-redux";
 import ChatMessage from "./chat-message";
 
 class ChatContainer extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      draft: "",
+    };
+  }
+
+  updateDraft(e) {
+    this.setState({
+      draft: e.target.value,
+    });
+  }
+
+  sendMessage() {
+    let message = this.state.draft;
+
+    if (!message) return false;
+
+    let room = this.props.room;
+
+    room.channel.push("message:new", {
+      text: message,
+      room_id: room.id,
+    });
+
+    this.setState({
+      draft: "",
+    });
+  }
+
   render() {
     let messages = this.props.messages.map((message) => {
       return <ChatMessage key={message.id} message={message} />;
@@ -15,8 +46,12 @@ class ChatContainer extends React.Component {
         <ul>{messages}</ul>
 
         <div className="compose-box">
-          <input placeholder="Type a message..." />
-          <button>Send</button>
+          <input
+            placeholder="Type a message..."
+            value={this.state.draft}
+            onChange={this.updateDraft.bind(this)}
+          />
+          <button onClick={this.sendMessage.bind(this)}>Send</button>
         </div>
       </div>
     );
@@ -34,6 +69,7 @@ const mapStateToProps = (state) => {
 
   return {
     messages: activeRoom ? activeRoom.messages : [],
+    room: activeRoom,
   };
 };
 
